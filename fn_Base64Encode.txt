@@ -1,0 +1,35 @@
+
+/*-------------------------------
+Convert from varchar to base64:
+-------------------------------*/
+CREATE FUNCTION fn_Base64Encode ( @Input NVARCHAR(MAX) )
+    RETURNS VARCHAR(MAX)
+BEGIN
+	DECLARE
+        /* Convert NVarchar to Varchar(not 100% success) */
+        /* NVarchar is unicode, Varchar is character */
+		@plain VARCHAR(max) = @Input,   
+		@encoded VARCHAR(max)
+	SELECT @encoded = 
+		CAST(N'' AS XML).value('xs:base64Binary(xs:hexBinary(sql:column("bin")))', 'VARCHAR(MAX)')
+	FROM ( SELECT CAST(@plain AS VARBINARY(MAX)) AS bin ) AS bin_sql_server_temp;
+	RETURN @encoded 
+END
+--
+SELECT EmployeeID,LastName, FirstName, dbo.fn_Base64Encode(LastName + ':' + FirstName) as base64, ReportsTo
+ FROM Employees
+---
+EmployeeID  LastName   FirstName  base64                     ReportsTo
+----------- ---------- ---------- -------------------------- -----------
+1           Davolio    Nancy      RGF2b2xpbzpOYW5jeQ==       2
+2           Fuller     Andrew     RnVsbGVyOkFuZHJldw==       1
+3           Leverling  Janet      TGV2ZXJsaW5nOkphbmV0       2
+4           Peacock    Margaret   UGVhY29jazpNYXJnYXJldA==   2
+5           Buchanan   Steven     QnVjaGFuYW46U3RldmVu       1
+6           Suyama     Michael    U3V5YW1hOk1pY2hhZWw=       5
+7           King       Robert     S2luZzpSb2JlcnQ=           5
+8           Callahan   Laura      Q2FsbGFoYW46TGF1cmE=       3
+9           Dodsworth  Anne       RG9kc3dvcnRoOkFubmU=       5
+
+(9 row(s) affected)
+

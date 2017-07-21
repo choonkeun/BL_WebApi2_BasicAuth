@@ -1,0 +1,47 @@
+
+GET http://localhost:1605/data/GetAll
+
+[Authorize(Roles = "myRole")]
+GET http://localhost:1605/data/GetEmployeeById/1 
+
+Authorization: Basic QnVjaGFuYW46U3RldmVu (Buchanan:Steven) 1
+Authorization: Basic Q2FsbGFoYW46TGF1cmE= (Callahan:Laura) 3
+Authorization: Basic U3V5YW1hOk1pY2hhZWw= (Suyama:Michael) 5
+
+accept: application/xml
+
+Content-type: application/json
+
+PUT http://localhost:1605/data/Employee
+{
+  "EmployeeID": 1,
+  "LastName": "Davolio",
+  "FirstName": "Nancy",
+  "Title": "Sales Representative",
+  "BirthDate": "1948-12-08T00:00:00",
+  "HireDate": "1992-05-01T00:00:00",
+  "Address": "507 - 20th Ave. E. Apt. 2A",
+  "City": "Seattle",
+  "Region": "WA",
+  "PostalCode": "98122",
+  "Country": "USA",
+  "HomePhone": "(206) 555-9857",
+  "Extension": "5467",
+  "ReportsTo": 2,
+  "Notes": "Education includes a BA in psychology from Colorado State University in 1970."
+}
+---
+LastName             FirstName  base64                   decoded           reportsto
+-------------------- ---------- ------------------------ -----------------------------
+Davolio              Nancy      RGF2b2xpbzpOYW5jeQ==     Davolio:Nancy     2
+Fuller               Andrew     RnVsbGVyOkFuZHJldw==     Fuller:Andrew     1
+Leverling            Janet      TGV2ZXJsaW5nOkphbmV0     Leverling:Janet   2
+Peacock              Margaret   UGVhY29jazpNYXJnYXJldA== Peacock:Margaret  2
+Buchanan             Steven     QnVjaGFuYW46U3RldmVu     Buchanan:Steven   1
+Suyama               Michael    U3V5YW1hOk1pY2hhZWw=     Suyama:Michael    5
+King                 Robert     S2luZzpSb2JlcnQ=         King:Robert       5
+Callahan             Laura      Q2FsbGFoYW46TGF1cmE=     Callahan:Laura    3
+Dodsworth            Anne       RG9kc3dvcnRoOkFubmU=     Dodsworth:Anne    5
+
+(9 row(s) affected)
+
